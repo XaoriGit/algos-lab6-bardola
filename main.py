@@ -46,6 +46,12 @@
         Подсказка: Используйте цикл while и запрос на ввод "Хотите сыграть снова? (да/нет)".
 """
 
+"""
+Суть игры: отгадать слово за 7 попыток
+"""
+import random
+import os
+
 HANGMANPICS = [
     """
   +---+
@@ -202,3 +208,47 @@ COMMON_NOUNS = [
     "участие",
 ]
 
+def t(word, symbols):
+    result = ""
+    for i in word:
+        if i in symbols:
+            result += f"{i} "
+        else: 
+            result += "_ "
+    return result
+
+def main():
+
+    while True:
+        SECRET_WORD = random.choice(COMMON_NOUNS)
+        symbols = []
+        attempt = 0
+        while attempt < 7:
+            interface = t(SECRET_WORD, symbols)
+            if "_" in interface:
+                os.system("clear")
+                print(HANGMANPICS[attempt])
+                print(interface)
+                symbol = input("Введите символ: ")
+                if symbol.lower() in SECRET_WORD & len(symbol) == 1:  
+                    symbols.append(symbol)
+                else:
+                    attempt += 1
+            else:
+                print("Вы выжили")
+        else: 
+            print("Вы повисли")
+            print(f"Задуманное слово: {SECRET_WORD}")
+        
+        while True:
+            user = input("Попробуем еще раз? ")
+            if user in ["y", "yes", "да", "д"]:
+                break
+            elif user in ["n", "no", "нет", "н"]:
+                print("До встречи, пупсик)")
+                return
+
+
+    
+
+main()
